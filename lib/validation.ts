@@ -1,0 +1,3 @@
+import { z } from 'zod'
+export const orderSchema = z.object({ customerName:z.string().min(2), phone:z.string().min(7), email:z.string().email().optional().or(z.literal('')), address:z.string().min(5), notes:z.string().optional(), paymentMethod:z.enum(['CASH_ON_DELIVERY','MOBILE_MONEY','BANK_TRANSFER']), items:z.array(z.object({productId:z.string(),quantity:z.number().int().positive()})).min(1) })
+export const repairSchema = z.object({customerName:z.string().min(2),phone:z.string().min(7),deviceType:z.string().min(2),brand:z.string().min(2),model:z.string().min(1),problem:z.string().min(10),preferredDate:z.string().optional(),notes:z.string().optional()})

@@ -1,0 +1,4 @@
+import { db } from '@/lib/db'
+import { repairSchema } from '@/lib/validation'
+export async function POST(request:Request){try{const body=repairSchema.parse(await request.json());const repair=await db.repair.create({data:{...body,preferredDate:body.preferredDate?new Date(body.preferredDate):null,requestNumber:`REP-${Date.now().toString().slice(-8)}`}});return Response.json({requestNumber:repair.requestNumber,status:repair.status},{status:201})}catch(e){return Response.json({error:e instanceof Error?e.message:'Invalid repair request'},{status:400})}}
+export async function GET(request:Request){const number=new URL(request.url).searchParams.get('number');if(!number)return Response.json({error:'Request number required'},{status:400});const repair=await db.repair.findUnique({where:{requestNumber:number},include:{images:true}});return repair?Response.json(repair):Response.json({error:'Repair request not found'},{status:404})}
